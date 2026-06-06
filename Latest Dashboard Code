@@ -1,0 +1,191 @@
+Build a complete production-ready Arc Wallet Dashboard using Next.js 15 App Router, TypeScript, Tailwind CSS, Wagmi, Viem, Ethers v6 and Arc App Kit.
+
+Project Name:
+arc-wallet-dashboard
+
+Network Configuration:
+
+- Network Name: Arc Testnet
+- Chain ID: 5042002
+- RPC URL: https://rpc.testnet.arc.network
+- WebSocket URL: wss://rpc.testnet.arc.network
+
+USDC Configuration:
+
+- Token Address:
+  0x3600000000000000000000000000000000000000
+
+Libraries:
+
+- next
+- react
+- typescript
+- tailwindcss
+- wagmi
+- viem
+- ethers
+- @tanstack/react-query
+- @circle-fin/app-kit
+- @circle-fin/adapter-viem-v2
+
+Features:
+
+1. Wallet Connection
+
+- MetaMask support
+- WalletConnect support
+- Auto reconnect
+- Disconnect wallet
+- Show connected address
+- Copy address button
+
+2. Dashboard
+
+- Wallet address card
+- Arc network card
+- Native token balance
+- USDC balance
+- Unified balance
+- Pending balance
+- Responsive card layout
+
+3. Unified Balance Integration
+
+Use Arc App Kit.
+
+Example:
+
+const balances =
+await kit.unifiedBalance.getBalances({
+sources:[...],
+token:"USDC",
+includePending:true
+});
+
+Display:
+
+- Total balance
+- Pending balance
+- Available balance
+- Source breakdown
+
+4. Send USDC
+
+Create transfer form:
+
+- Recipient address
+- Amount
+- Validate address
+- Validate amount
+- Loading state
+- Success state
+- Error handling
+
+Use ERC20 transfer.
+
+5. Transaction History
+
+Store recent transactions.
+
+Display:
+
+- Hash
+- Status
+- Amount
+- Recipient
+- Timestamp
+
+6. Navigation
+
+Create sidebar navigation.
+
+Pages:
+
+/dashboard
+/send
+/history
+/settings
+
+7. Components
+
+Navbar.tsx
+Sidebar.tsx
+ConnectWallet.tsx
+BalanceCard.tsx
+UnifiedBalanceCard.tsx
+SendUSDC.tsx
+TransactionHistory.tsx
+NetworkBadge.tsx
+LoadingSpinner.tsx
+
+8. Folder Structure
+
+app/
+components/
+hooks/
+lib/
+types/
+constants/
+
+9. Create Files
+
+package.json
+next.config.ts
+tailwind.config.ts
+postcss.config.js
+tsconfig.json
+.env.local.example
+
+10. Create Arc Config
+
+lib/arc.ts
+
+Include:
+
+- chain config
+- rpc config
+- token config
+
+11. Create Wagmi Config
+
+lib/wagmi.ts
+
+12. Styling
+
+Use modern glassmorphism Web3 dashboard design.
+
+Requirements:
+
+- dark theme
+- gradient cards
+- responsive layout
+- mobile support
+
+13. Error Handling
+
+Handle:
+
+- wallet not installed
+- wrong network
+- rejected transactions
+- insufficient balance
+
+14. Security
+
+Use TypeScript types everywhere.
+
+Validate all user inputs.
+
+15. Output
+
+Generate complete source code for every file.
+
+Do not give explanations.
+
+Generate all files with full code.
+
+Project must run after:
+
+npm install
+
+npm run dev
