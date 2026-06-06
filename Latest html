@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arc Wallet Pro</title><script src="https://cdn.jsdelivr.net/npm/ethers@6.13.1/dist/ethers.umd.min.js"></script><style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:#fff;
+padding:30px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+color:#38bdf8;
+}
+
+button{
+background:#2563eb;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+color:#fff;
+cursor:pointer;
+font-weight:600;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:20px;
+margin-bottom:25px;
+}
+
+.card{
+background:#111827;
+padding:20px;
+border-radius:16px;
+border:1px solid #1f2937;
+}
+
+.label{
+color:#94a3b8;
+font-size:14px;
+margin-bottom:8px;
+}
+
+.value{
+font-size:22px;
+font-weight:700;
+word-break:break-all;
+}
+
+.panel{
+background:#111827;
+padding:20px;
+border-radius:16px;
+border:1px solid #1f2937;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-top:10px;
+margin-bottom:14px;
+background:#0f172a;
+border:1px solid #334155;
+color:white;
+border-radius:10px;
+}
+
+.txhash{
+margin-top:15px;
+color:#22c55e;
+word-break:break-all;
+}
+</style></head>
+<body><div class="container"><div class="header">
+<div class="logo">ARC Wallet</div><button id="connectBtn">
+Connect Wallet
+</button>
+</div><div class="grid"><div class="card">
+<div class="label">Wallet</div>
+<div id="walletAddress" class="value">
+Not Connected
+</div>
+</div><div class="card">
+<div class="label">Network</div>
+<div class="value">
+Arc Testnet
+</div>
+</div><div class="card">
+<div class="label">Balance</div>
+<div id="nativeBalance" class="value">
+0
+</div>
+</div></div><div class="panel"><h2>Send USDC</h2><input
+id="receiver"
+placeholder="Recipient Address">
+
+<input
+id="amount"
+placeholder="Amount">
+
+<button id="sendBtn">
+Send USDC
+</button><div id="txhash" class="txhash"></div></div></div><script>
+
+const ARC_CHAIN_ID = "0x4CF0D2"; // 5042002
+
+const USDC_ADDRESS =
+"0x3600000000000000000000000000000000000000";
+
+const ERC20_ABI = [
+"function transfer(address to,uint256 amount) returns (bool)",
+"function balanceOf(address owner) view returns (uint256)",
+"function decimals() view returns (uint8)"
+];
+
+let provider;
+let signer;
+let account;
+
+async function switchToArc(){
+
+try{
+
+await window.ethereum.request({
+method:"wallet_switchEthereumChain",
+params:[{chainId:ARC_CHAIN_ID}]
+});
+
+}catch(err){
+
+if(err.code===4902){
+
+await window.ethereum.request({
+method:"wallet_addEthereumChain",
+params:[{
+chainId:ARC_CHAIN_ID,
+chainName:"Arc Testnet",
+rpcUrls:[
+"https://rpc.testnet.arc.network"
+],
+nativeCurrency:{
+name:"ARC",
+symbol:"ARC",
+decimals:18
+}
+}]
+});
+
+}
+
+}
+
+}
+
+async function connectWallet(){
+
+if(!window.ethereum){
+alert("Please install MetaMask");
+return;
+}
+
+await switchToArc();
+
+provider =
+new ethers.BrowserProvider(
+window.ethereum
+);
+
+await provider.send(
+"eth_requestAccounts",
+[]
+);
+
+signer =
+await provider.getSigner();
+
+account =
+await signer.getAddress();
+
+document.getElementById(
+"walletAddress"
+).innerText =
+account;
+
+const balance =
+await provider.getBalance(account);
+
+document.getElementById(
+"nativeBalance"
+).innerText =
+parseFloat(
+ethers.formatEther(balance)
+).toFixed(4);
+
+document.getElementById(
+"connectBtn"
+).innerText =
+"Connected";
+
+}
+
+async function sendUSDC(){
+
+if(!signer){
+alert("Connect wallet first");
+return;
+}
+
+const receiver =
+document.getElementById(
+"receiver"
+).value;
+
+const amount =
+document.getElementById(
+"amount"
+).value;
+
+if(!receiver || !amount){
+alert("Fill all fields");
+return;
+}
+
+try{
+
+const token =
+new ethers.Contract(
+USDC_ADDRESS,
+ERC20_ABI,
+signer
+);
+
+const decimals =
+await token.decimals();
+
+const tx =
+await token.transfer(
+receiver,
+ethers.parseUnits(
+amount,
+decimals
+)
+);
+
+document.getElementById(
+"txhash"
+).innerHTML =
+"Pending: " + tx.hash;
+
+await tx.wait();
+
+document.getElementById(
+"txhash"
+).innerHTML =
+"Success: " + tx.hash;
+
+}catch(error){
+
+console.error(error);
+
+alert(
+"Transaction failed"
+);
+
+}
+
+}
+
+document
+.getElementById("connectBtn")
+.addEventListener(
+"click",
+connectWallet
+);
+
+document
+.getElementById("sendBtn")
+.addEventListener(
+"click",
+sendUSDC
+);
+
+</script></body>
+</html>
