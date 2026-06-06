@@ -1,0 +1,136 @@
+# ArcPortal---Smart-value-router-MVP-on-Arc.-A-simple-web-app-that-routes-transaction-accross-chain.
+A seamless App on ARC ecosystem 
+Build a complete production-ready Arc Wallet Dashboard using Next.js 15, TypeScript, Tailwind CSS, Wagmi and Viem.
+
+Network Configuration:
+
+- Arc Testnet
+- Chain ID: 5042002
+- RPC URL: https://rpc.testnet.arc.network
+- WebSocket: wss://rpc.testnet.arc.network
+
+USDC:
+
+- Contract Address:
+  0x3600000000000000000000000000000000000000
+
+Dependencies:
+
+npm install @circle-fin/app-kit
+npm install @circle-fin/adapter-viem-v2
+npm install wagmi viem
+npm install @tanstack/react-query
+
+Features:
+
+1. Wallet Connection
+
+- MetaMask
+- WalletConnect
+- Wagmi Config
+- Chain Switching
+
+2. Dashboard
+
+- Connected Address
+- Arc Network Status
+- USDC Balance
+- Unified Balance Summary
+
+3. Unified Balance Integration
+
+Use:
+
+import { AppKit } from "@circle-fin/app-kit";
+
+const kit = new AppKit();
+
+const balances = await kit.unifiedBalance.getBalances({
+sources: [{ adapter }],
+networkType: "testnet",
+includePending: true
+});
+
+Display:
+
+- Total Confirmed Balance
+- Total Pending Balance
+- Breakdown Per Source
+
+4. Send USDC
+
+Create a transfer page:
+
+- Recipient Address Input
+- Amount Input
+- Send Button
+- Transaction Hash
+- Success State
+
+Use ERC20 transfer with Viem.
+
+5. Transaction History
+
+Show:
+
+- Hash
+- Amount
+- Status
+- Timestamp
+
+Store recent transactions in local state.
+
+6. UI
+
+Use Tailwind CSS.
+
+Pages:
+
+/dashboard
+/send
+/history
+
+Components:
+
+ConnectWallet.tsx
+BalanceCard.tsx
+UnifiedBalance.tsx
+SendUSDC.tsx
+TransactionHistory.tsx
+Navbar.tsx
+
+7. Folder Structure
+
+app/
+components/
+hooks/
+lib/
+types/
+
+8. Create:
+
+package.json
+tailwind.config.ts
+postcss.config.js
+tsconfig.json
+.env.local.example
+
+9. Add Arc Chain Config:
+
+chainId: 5042002
+rpcUrl: https://rpc.testnet.arc.network
+
+10. Generate complete source code for every file.
+
+11. Ready for GitHub deployment.
+
+12. Include installation commands:
+
+npm install
+npm run dev
+
+13. Use modern TypeScript best practices.
+
+14. Use Next.js App Router.
+
+15. Make the UI look like a professional Web3 dashboard.
